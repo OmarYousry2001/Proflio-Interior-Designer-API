@@ -547,6 +547,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to يجب أن تكون القيمة من {0} إلى {1}.
+        /// </summary>
+        public static string FieldRangeNumber {
+            get {
+                return ResourceManager.GetString("FieldRangeNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to هذا الحقل مطلوب ..
         /// </summary>
         public static string FieldRequired {
@@ -700,6 +709,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to البريد الإلكتروني غير صالح.
+        /// </summary>
+        public static string InvalidEmail {
+            get {
+                return ResourceManager.GetString("InvalidEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to البريد الإلكتروني أو كلمة المرور غير صحيحة.
         /// </summary>
         public static string InvalidEmailOrPassword {
@@ -763,7 +781,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to رقم الهاتف المقدم غير صالح للبلد المحدد..
+        ///   Looks up a localized string similar to رقم الهاتف المقدم غير صالح ..
         /// </summary>
         public static string InvalidPhoneNumber {
             get {

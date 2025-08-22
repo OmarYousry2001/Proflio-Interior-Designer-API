@@ -46,7 +46,7 @@ namespace BL.GeneralService.CMS
             {
                 return BadRequest<string?>("");
             }
-            return Success(user.DisplayName);
+            return Success(user.FullName);
         }
 
         public Response<string?> GetUserName()

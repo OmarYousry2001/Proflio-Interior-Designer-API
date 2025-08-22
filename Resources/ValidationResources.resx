@@ -484,7 +484,7 @@
     <value>هذا الحقل مطلوب .</value>
   </data>
   <data name="InvalidPhoneNumber" xml:space="preserve">
-    <value>رقم الهاتف المقدم غير صالح للبلد المحدد.</value>
+    <value>رقم الهاتف المقدم غير صالح .</value>
   </data>
   <data name="InvalidNationalId" xml:space="preserve">
     <value>الرقم القومى المقدم غير صالح للبلد المحدد.</value>
@@ -617,5 +617,11 @@
   </data>
   <data name="PasswordComplexity" xml:space="preserve">
     <value>كلمة المرور يجب أن تحتوي على حرف كبير، حرف صغير، رقم، ورمز خاص، وألا تقل عن 6 أحرف</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>البريد الإلكتروني غير صالح</value>
+  </data>
+  <data name="FieldRangeNumber" xml:space="preserve">
+    <value>يجب أن تكون القيمة من {0} إلى {1}</value>
   </data>
 </root>

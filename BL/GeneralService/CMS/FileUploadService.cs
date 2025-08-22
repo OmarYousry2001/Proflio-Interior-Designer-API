@@ -65,7 +65,11 @@ namespace BL.GeneralService.CMS
             return await Task.Run(() => Convert.FromBase64String(base64String));
         }
 
-        public async Task<string> UploadFileAsync(IFormFile file, string featureFolder, string oldFileName = null)
+        public async Task<string> UploadFileAsync(
+           IFormFile file,
+           string featureFolder,
+           string oldFileName = null,
+           bool convertToWebP = true)
         {
             if (file == null || file.Length == 0)
                 throw new ArgumentException(ValidationResources.Invalidfile);
@@ -73,15 +77,24 @@ namespace BL.GeneralService.CMS
             if (file.Length > _maxFileSize)
                 throw new ArgumentException(string.Format(ValidationResources.FileSizeLimit, _maxFileSize / 1024 / 1024));
 
-
             var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
             if (!_allowedExtensions.Contains(extension))
                 throw new ArgumentException($"{ValidationResources.InvalidFormat} {string.Join(", ", _allowedExtensions)}");
 
+            // تنظيف الأسماء
+            string CleanFileName(string input)
+            {
+                var invalidChars = Path.GetInvalidFileNameChars();
+                return new string(input.Where(ch => !invalidChars.Contains(ch)).ToArray()).Trim();
+            }
 
+            featureFolder = CleanFileName(featureFolder);
+
+            // إنشاء المسار
             var uploadsFolder = Path.Combine(_env.WebRootPath, _imagesFolder, featureFolder);
             Directory.CreateDirectory(uploadsFolder);
 
+            // حذف الملف القديم إن وجد
             if (!string.IsNullOrEmpty(oldFileName))
             {
                 var oldFilePath = Path.Combine(uploadsFolder, oldFileName);
@@ -91,26 +104,42 @@ namespace BL.GeneralService.CMS
                 }
             }
 
-            // convert file to byte array   
+            // تحويل الملف إلى byte[]
             var fileBytes = await GetFileBytesAsync(file);
 
-            //   WebP  100%
-            var imageProcessor = new ImageProcessingService();
-            var processedImage = imageProcessor.ConvertToWebP(fileBytes, quality: 100);
+            string uniqueFileName;
+            string filePath;
 
-            var originalFileName = Path.GetFileName(file.FileName).Trim();
-            var uniqueFileName = $"{Guid.NewGuid()}_{originalFileName}";
-
-
-            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            if (convertToWebP)
             {
-                await file.CopyToAsync(fileStream);
+                // تحويل الصورة لـ WebP
+                var imageProcessor = new ImageProcessingService();
+                var processedImage = imageProcessor.ConvertToWebP(fileBytes, quality: 100);
+
+                uniqueFileName = $"{Guid.NewGuid()}.webp";
+                filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                await File.WriteAllBytesAsync(filePath, processedImage);
             }
-            //var result = _imagesFolder +"/"+ featureFolder + "/" + uniqueFileName;
-            return uniqueFileName;
+            else
+            {
+                // حفظ الصورة بصيغتها الأصلية
+                uniqueFileName = $"{Guid.NewGuid()}{extension}";
+                filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                }
+            }
+
+            // إرجاع relative path
+            var relativePath = Path.Combine(_imagesFolder, featureFolder, uniqueFileName)
+                                  .Replace("\\", "/");
+
+            return relativePath;
         }
+
 
         public async Task<string> UploadFileAsync(byte[] fileBytes, string folderName, string? oldFileName = null)
         {

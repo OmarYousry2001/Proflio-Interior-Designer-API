@@ -1,6 +1,5 @@
-﻿
+﻿using Domains.Entities;
 using Domains.Entities.Identity;
-using Domains.Entities.Product;
 using Domains.Identity;
 using EntityFrameworkCore.EncryptColumn.Extension;
 using EntityFrameworkCore.EncryptColumn.Interfaces;
@@ -15,14 +14,17 @@ namespace DAL.ApplicationContext
         private readonly IEncryptionProvider _encryptionProvider;
 
         public DbSet<UserRefreshToken> UserRefreshToken { get; set; }
+        public DbSet<Settings> Settings { get; set; }
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Image> Images { get; set; }
 
-      
 
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-            _encryptionProvider = new GenerateEncryptionProvider("1326406c78014aa894a4daeee1a32276");
+            _encryptionProvider = new GenerateEncryptionProvider("1326431c78014aa894a4daeee1a32276");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

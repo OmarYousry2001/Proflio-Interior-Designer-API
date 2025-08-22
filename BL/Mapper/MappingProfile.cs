@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BL.DTO.Entities;
+using Domains.Entities;
 using Domains.Entities.Product;
 
 namespace BL.Mapper
@@ -26,8 +27,13 @@ namespace BL.Mapper
             #endregion
 
 
-         
-         
+            #region Settings 
+            CreateMap<Settings, SettingsDTO>().ReverseMap();
+            #endregion
+
+
+
+
 
 
         }

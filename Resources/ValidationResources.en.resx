@@ -484,7 +484,7 @@
     <value>This field is required .</value>
   </data>
   <data name="InvalidPhoneNumber" xml:space="preserve">
-    <value>The provided phone number is not valid for the selected country.</value>
+    <value>The provided phone number is not valid.</value>
   </data>
   <data name="InvalidNationalId" xml:space="preserve">
     <value>The provided national ID is not valid for the selected country.</value>
@@ -617,5 +617,11 @@
   </data>
   <data name="PasswordComplexity" xml:space="preserve">
     <value>The password must contain at least one uppercase letter, one lowercase letter, one digit, one special character, and be at least 6 characters long</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Invalid email address</value>
+  </data>
+  <data name="FieldRangeNumber" xml:space="preserve">
+    <value>The value must be between {0} and {1}</value>
   </data>
 </root>
