@@ -1,16 +1,11 @@
-﻿using Azure.Core;
-using BL.Contracts.IMapper;
+﻿using BL.Contracts.IMapper;
 using BL.Contracts.Services.Generic;
 using BL.GenericResponse;
 using DAL.Contracts.Repositories.Generic;
 using Domains.Entities.Base;
-using Shared.DTOs.Base;
 
 namespace BL.Services.Generic
 {
-    //public abstract class BaseService<T, D> : ResponseHandler, IBaseService<T, D>
-    //    where T : BaseEntity
-    //    where D : BaseDto
     public abstract class BaseService<T, D> : ResponseHandler, IBaseService<T, D>
      where T : BaseEntity
 
@@ -60,9 +55,6 @@ namespace BL.Services.Generic
 
         public virtual async Task<Response<bool>> UpdateAsync(D dto, Guid updaterId)
         {
-            //var oldEntity = await _baseRepository.FindByIdAsync(dto.Id);
-            //if (oldEntity == null) return NotFound<bool>();
-
             var entity = _mapper.MapModel<D, T>(dto);
             var isUpdated  = await _baseRepository.UpdateAsync(entity, updaterId);
             if (isUpdated)
@@ -73,14 +65,11 @@ namespace BL.Services.Generic
 
         public virtual async Task<Response<bool>> DeleteAsync(Guid id, Guid userId)
         {
-            //var entity = await _baseRepository.FindByIdAsync(id);
-            //if (entity == null) return NotFound<bool>();
             var isDeleted = await _baseRepository.UpdateCurrentStateAsync(id, userId);
             if (isDeleted) return Deleted<bool>();
             else return BadRequest<bool>();
 
         }
 
-       
     }
 }

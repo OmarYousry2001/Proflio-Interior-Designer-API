@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BL.DTO.Entities;
 using Domains.Entities;
-using Domains.Entities.Product;
+
 
 namespace BL.Mapper
 {
@@ -16,14 +16,14 @@ namespace BL.Mapper
             //CreateMap<VwUserProfile, UserProfileViewDto>().ReverseMap();
 
             #region Product
-            CreateMap<Product, GetProductDTO>()
-            .ForMember(des => des.CategoryName, opt => opt.MapFrom(src => src.Category.Name))
-            .ForMember(des => des.Id, opt => opt.MapFrom(src => src.Id)).ReverseMap();
+            //CreateMap<Product, GetProductDTO>()
+            //.ForMember(des => des.CategoryName, opt => opt.MapFrom(src => src.Category.Name))
+            //.ForMember(des => des.Id, opt => opt.MapFrom(src => src.Id)).ReverseMap();
 
-            CreateMap<Photo, PhotoDTO>()
-            .ForMember(des => des.ImageName, opt => opt.MapFrom(src => src.ImagePath)).ReverseMap();
+            //CreateMap<Photo, PhotoDTO>()
+            //.ForMember(des => des.ImageName, opt => opt.MapFrom(src => src.ImagePath)).ReverseMap();
 
-            CreateMap<ProductDTO, Product>().ReverseMap();
+            //CreateMap<ProductDTO, Product>().ReverseMap();
             #endregion
 
 
@@ -32,6 +32,9 @@ namespace BL.Mapper
             .ForMember(des => des.LogoName, opt => opt.MapFrom(src => src.Logo)).ReverseMap();
             #endregion
 
+            #region Category 
+            CreateMap<Category, CategoryDTO>().ReverseMap();
+            #endregion
 
 
 

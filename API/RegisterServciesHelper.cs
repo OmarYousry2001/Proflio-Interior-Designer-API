@@ -294,7 +294,7 @@ namespace API
             builder.Services.AddHttpContextAccessor();
 
             // Project Services
-            builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<ISettingsService, SettingsService>();
 
 
