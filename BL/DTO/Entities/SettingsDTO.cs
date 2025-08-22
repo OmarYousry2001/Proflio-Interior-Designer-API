@@ -12,7 +12,7 @@ namespace BL.DTO.Entities
         [StringLength(100, MinimumLength = 2, ErrorMessageResourceName = "FieldLength", ErrorMessageResourceType = typeof(ValidationResources))]
         public string Location { get; set; } = null!;
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(ValidationResources))]
-        [RegularExpression(@"^0\d{10}$", ErrorMessageResourceName = "InvalidPhone", ErrorMessageResourceType = typeof(ValidationResources))]
+        [RegularExpression(@"^0\d{10}$", ErrorMessageResourceName = "InvalidPhoneNumber", ErrorMessageResourceType = typeof(ValidationResources))]
         public string Phone { get; set; } = null!;
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(ValidationResources))]
         [EmailAddress(ErrorMessageResourceName = "InvalidEmail", ErrorMessageResourceType = typeof(ValidationResources))]
@@ -37,7 +37,7 @@ namespace BL.DTO.Entities
         [Range(1, 10000, ErrorMessageResourceName = "ValueMustBeBetween", ErrorMessageResourceType = typeof(ValidationResources))]
         public int HappyClients { get; set; }
         public string? LogoName { get; set; }
-        [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(ValidationResources))]
+
         [AllowedExtensions(new[] { ".jpg", ".jpeg", ".png", ".webp" })]
         [MaxFileSize(5)]
         public IFormFile? Photo { get; set; }

@@ -23,13 +23,13 @@ namespace BL.Services.Custom
             _settingsRepository = settingsRepository;
             _mapper = mapper;
         }
-        public  async Task<Response<bool>> SaveAsync(SettingsDTO dto, Guid userId)
+        public override async Task<Response<bool>> SaveAsync(SettingsDTO dto, Guid userId)
         {
             if (dto.Photo == null && dto.LogoName == null) return BadRequest<bool>();
             var entity = _mapper.MapModel<SettingsDTO, Settings>(dto);
 
 
-            if (string.IsNullOrEmpty(dto.Phone))
+            if (dto.Photo != null)
             {
                 entity.Logo = await _fileUploadService.UploadFileAsync(dto.Photo, "Settings" , dto.LogoName);
             }

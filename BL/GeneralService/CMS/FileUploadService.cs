@@ -81,7 +81,7 @@ namespace BL.GeneralService.CMS
             if (!_allowedExtensions.Contains(extension))
                 throw new ArgumentException($"{ValidationResources.InvalidFormat} {string.Join(", ", _allowedExtensions)}");
 
-            // تنظيف الأسماء
+            // cleans names
             string CleanFileName(string input)
             {
                 var invalidChars = Path.GetInvalidFileNameChars();
@@ -90,21 +90,22 @@ namespace BL.GeneralService.CMS
 
             featureFolder = CleanFileName(featureFolder);
 
-            // إنشاء المسار
+            // Create Path
             var uploadsFolder = Path.Combine(_env.WebRootPath, _imagesFolder, featureFolder);
             Directory.CreateDirectory(uploadsFolder);
 
-            // حذف الملف القديم إن وجد
+            // Delete old file if exists    
             if (!string.IsNullOrEmpty(oldFileName))
             {
-                var oldFilePath = Path.Combine(uploadsFolder, oldFileName);
+                var oldFileNameOnly = Path.GetFileName(oldFileName); 
+                var oldFilePath = Path.Combine(uploadsFolder, oldFileNameOnly);
                 if (File.Exists(oldFilePath))
                 {
                     File.Delete(oldFilePath);
                 }
             }
 
-            // تحويل الملف إلى byte[]
+            // convert to byte[]
             var fileBytes = await GetFileBytesAsync(file);
 
             string uniqueFileName;
@@ -112,7 +113,7 @@ namespace BL.GeneralService.CMS
 
             if (convertToWebP)
             {
-                // تحويل الصورة لـ WebP
+                // convert to WebP
                 var imageProcessor = new ImageProcessingService();
                 var processedImage = imageProcessor.ConvertToWebP(fileBytes, quality: 100);
 
@@ -123,7 +124,7 @@ namespace BL.GeneralService.CMS
             }
             else
             {
-                // حفظ الصورة بصيغتها الأصلية
+                // Save the image in its original format
                 uniqueFileName = $"{Guid.NewGuid()}{extension}";
                 filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
@@ -133,7 +134,7 @@ namespace BL.GeneralService.CMS
                 }
             }
 
-            // إرجاع relative path
+            // return relative path
             var relativePath = Path.Combine(_imagesFolder, featureFolder, uniqueFileName)
                                   .Replace("\\", "/");
 

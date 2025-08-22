@@ -28,7 +28,8 @@ namespace BL.Mapper
 
 
             #region Settings 
-            CreateMap<Settings, SettingsDTO>().ReverseMap();
+            CreateMap<Settings, SettingsDTO>()
+            .ForMember(des => des.LogoName, opt => opt.MapFrom(src => src.Logo)).ReverseMap();
             #endregion
 
 

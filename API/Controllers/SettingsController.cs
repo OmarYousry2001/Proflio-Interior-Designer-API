@@ -39,7 +39,7 @@ namespace API.Controllers
         }
 
         [HttpPut(Router.SettingsRouting.Update)]
-        public async Task<ActionResult<RegisterDTO>> Update(SettingsDTO settingsDTO)
+        public async Task<ActionResult<RegisterDTO>> Update([FromForm] SettingsDTO settingsDTO)
         {
             var result = await _settingsService.SaveAsync(settingsDTO, GuidUserId);
             return NewResult(result);
