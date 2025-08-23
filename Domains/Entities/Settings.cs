@@ -11,6 +11,9 @@ namespace Domains.Entities
         public string InteriorLink { get; set; } = null!;// or WebsiteLink
         public string AboutMe { get; set; } = null!;
         public string Logo { get; set; } = null!; // store image path
+        public string Video { get; set; } = null!; // store Video path
+        public string PersonPhoto { get; set; } = null!;
+
         public string CopyrightText { get; set; } = null!;
         public int ProjectsCompleted { get; set; }
         public int YearsExperience { get; set; }

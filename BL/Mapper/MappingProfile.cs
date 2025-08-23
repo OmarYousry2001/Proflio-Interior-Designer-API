@@ -27,7 +27,13 @@ namespace BL.Mapper
 
             #region Settings 
             CreateMap<Settings, SettingsDTO>()
-            .ForMember(des => des.LogoName, opt => opt.MapFrom(src => src.Logo)).ReverseMap();
+                .ForMember(dest => dest.LogoName, opt => opt.MapFrom(src => src.Logo))
+                .ForMember(dest => dest.PersonPhotoName, opt => opt.MapFrom(src => src.PersonPhoto))
+                .ForMember(dest => dest.VideoName, opt => opt.MapFrom(src => src.Video))
+                .ForMember(dest => dest.Photo, opt => opt.Ignore())
+                .ForMember(dest => dest.PersonPhoto, opt => opt.Ignore())
+                .ForMember(dest => dest.Video, opt => opt.Ignore()).ReverseMap();
+
             #endregion
 
             #region Category 

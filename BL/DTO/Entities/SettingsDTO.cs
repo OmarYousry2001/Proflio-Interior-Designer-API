@@ -37,9 +37,21 @@ namespace BL.DTO.Entities
         [Range(1, 10000, ErrorMessageResourceName = "ValueMustBeBetween", ErrorMessageResourceType = typeof(ValidationResources))]
         public int HappyClients { get; set; }
         public string? LogoName { get; set; }
+        public string? PersonPhotoName { get; set; }
+        public string? VideoName { get; set; }
+
+        
+
 
         [AllowedExtensions(new[] { ".jpg", ".jpeg", ".png", ".webp" })]
         [MaxFileSize(5)]
         public IFormFile? Photo { get; set; }
+
+        [AllowedExtensions(new[] { ".jpg", ".jpeg", ".png", ".webp" })]
+        [MaxFileSize(5)]
+        public IFormFile? PersonPhoto { get; set; }
+
+        public IFormFile? Video { get; set; }
+
     }
 }

@@ -33,6 +33,16 @@ namespace BL.Services.Custom
             {
                 entity.Logo = await _fileUploadService.UploadFileAsync(dto.Photo, "Settings" , dto.LogoName);
             }
+            if (dto.PersonPhoto != null)
+            {
+                entity.PersonPhoto = await _fileUploadService.UploadFileAsync(dto.PersonPhoto, "Settings", dto.PersonPhotoName);
+            }
+            if (dto.Video != null)
+            {
+                entity.Video = await _fileUploadService.UploadVideoAsync(dto.Video, "Settings", dto.VideoName);
+            }
+
+
             var isSaved = await _settingsRepository.SaveAsync(entity, userId);
             if (isSaved) return Success(true);
             else return BadRequest<bool>();

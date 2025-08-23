@@ -38,6 +38,7 @@ namespace API.Controllers
             return NewResult(result);
         }
 
+        [RequestSizeLimit(60_000_000)] // 60 MB
         [HttpPut(Router.SettingsRouting.Update)]
         public async Task<IActionResult> Update([FromForm] SettingsDTO settingsDTO)
         {

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Resources;
-using Resources.Data.Resources;
 
 namespace BL.GeneralService.CMS
 {
@@ -135,6 +134,64 @@ namespace BL.GeneralService.CMS
             }
 
             // return relative path
+            var relativePath = Path.Combine(_imagesFolder, featureFolder, uniqueFileName)
+                                  .Replace("\\", "/");
+
+            return relativePath;
+        }
+
+        public async Task<string> UploadVideoAsync( IFormFile file, string featureFolder, string oldFileName = null)
+        {
+            if (file == null || file.Length == 0)
+                throw new ArgumentException(ValidationResources.Invalidfile);
+
+            // Increase the maximum allowed video size (e.g., 100MB)
+            // Check if the uploaded file exceeds the maximum allowed size
+
+            var maxVideoSize = 100 * 1024 * 1024;
+            if (file.Length > maxVideoSize)
+                throw new ArgumentException($"File size exceeds the limit of {maxVideoSize / 1024 / 1024} MB.");
+
+            // Validate the video file extension
+            var allowedVideoExtensions = new[] { ".mp4", ".mov", ".avi", ".mkv" };
+            var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+            if (!allowedVideoExtensions.Contains(extension))
+                throw new ArgumentException($"Invalid video format. Allowed: {string.Join(", ", allowedVideoExtensions)}");
+
+            // Clean the folder name
+            string CleanFileName(string input)
+            {
+                var invalidChars = Path.GetInvalidFileNameChars();
+                return new string(input.Where(ch => !invalidChars.Contains(ch)).ToArray()).Trim();
+            }
+
+            featureFolder = CleanFileName(featureFolder);
+
+            // Create the path
+            var uploadsFolder = Path.Combine(_env.WebRootPath, _imagesFolder, featureFolder);
+            Directory.CreateDirectory(uploadsFolder);
+
+            // Delete the old video if it exists
+            if (!string.IsNullOrEmpty(oldFileName))
+            {
+                var oldFilePath = Path.Combine(uploadsFolder, Path.GetFileName(oldFileName));
+                if (File.Exists(oldFilePath))
+                {
+                    File.Delete(oldFilePath);
+                }
+            }
+
+            // Generate a unique file name
+            var uniqueFileName = $"{Guid.NewGuid()}{extension}";
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            // Save the video
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(fileStream);
+            }
+
+            // Return the relative path
             var relativePath = Path.Combine(_imagesFolder, featureFolder, uniqueFileName)
                                   .Replace("\\", "/");
 
