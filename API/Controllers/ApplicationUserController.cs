@@ -29,21 +29,7 @@ namespace API.Controllers
         #endregion
 
         #region Apis
-        [HttpPost(Router.ApplicationUserRouting.Register)]
-        public async Task<ActionResult<RegisterDTO>> Register(RegisterDTO registerDTO)
-        {
-            var result = await _applicationUserService.RegisterAsync(registerDTO);
-            return NewResult(result);
-
-        }
-
-        // After user Register 
-        [HttpPost(Router.ApplicationUserRouting.ConfirmEmail)]
-        // Remember With Angular  Set http verb To HttpPost
-        public async Task<IActionResult> ConfirmEmail(ConfirmEmailDTO confirmEmailDTO)
-        {
-            return NewResult(await _applicationUserService.ConfirmUserEmail(confirmEmailDTO.UserId, confirmEmailDTO.Code));
-        }
+      
 
         [HttpGet(Router.ApplicationUserRouting.SendResetPassword)]
         public async Task<IActionResult> SendResetPassword(string email)
