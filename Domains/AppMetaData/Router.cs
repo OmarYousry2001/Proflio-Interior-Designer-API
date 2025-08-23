@@ -38,7 +38,8 @@
             public const string Delete = Prefix + SingleRoute;
         }
 
-        
+
+
         public static class ApplicationUserRouting
         {
             public const string Prefix = Rule + "User/";

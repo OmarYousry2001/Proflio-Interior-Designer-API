@@ -296,7 +296,7 @@ namespace API
             // Project Services
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<ISettingsService, SettingsService>();
-
+            builder.Services.AddScoped<IProjectService, ProjectService>();
 
             #endregion
 

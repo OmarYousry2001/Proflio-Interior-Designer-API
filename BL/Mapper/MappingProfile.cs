@@ -2,10 +2,8 @@
 using BL.DTO.Entities;
 using Domains.Entities;
 
-
 namespace BL.Mapper
 {
-    // Main mapping profile file (MappingProfile.cs)
     public partial class MappingProfile : Profile
     {
         public MappingProfile()
@@ -35,6 +33,26 @@ namespace BL.Mapper
             #region Category 
             CreateMap<Category, CategoryDTO>().ReverseMap();
             #endregion
+
+
+            #region Project 
+
+            CreateMap<Project, GetProjectDTO>()
+            .ForMember(des => des.CategoryName, opt => opt.MapFrom(src => src.Category.Name))
+            .ForMember(des => des.Images, opt => opt.MapFrom(src => src.Images))
+            .ForMember(des => des.Id, opt => opt.MapFrom(src => src.Id)).ReverseMap();
+
+            CreateMap<ProjectDTO, Project>().ReverseMap();
+
+            #endregion
+
+
+            #region Image 
+            CreateMap<Image, ImageDTO>()
+           .ForMember(des => des.ImgName, opt => opt.MapFrom(src => src.ImgPath)).ReverseMap();    
+            #endregion
+
+
 
 
 

@@ -624,4 +624,7 @@
   <data name="FieldRangeNumber" xml:space="preserve">
     <value>يجب أن تكون القيمة من {0} إلى {1}</value>
   </data>
+  <data name="ValueMustBeBetween" xml:space="preserve">
+    <value>يجب أن تكون القيمة بين {0} و {1}</value>
+  </data>
 </root>

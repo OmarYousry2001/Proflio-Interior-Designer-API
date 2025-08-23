@@ -15,4 +15,5 @@ namespace Domains.Entities
 
         public ICollection<Image> Images { get; set; }
     }
+
 }

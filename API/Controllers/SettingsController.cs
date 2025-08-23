@@ -25,21 +25,21 @@ namespace API.Controllers
 
         #region Apis
         [HttpGet(Router.SettingsRouting.GetAll)]
-        public async Task<ActionResult<RegisterDTO>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
             var result = await _settingsService.GetAllAsync();
             return NewResult(result);
 
         }
         [HttpGet(Router.SettingsRouting.GetById)]
-        public async Task<ActionResult<RegisterDTO>> GetById(Guid id )
+        public async Task<IActionResult> GetById(Guid id )
         {
             var result = await _settingsService.FindByIdAsync(id);
             return NewResult(result);
         }
 
         [HttpPut(Router.SettingsRouting.Update)]
-        public async Task<ActionResult<RegisterDTO>> Update([FromForm] SettingsDTO settingsDTO)
+        public async Task<IActionResult> Update([FromForm] SettingsDTO settingsDTO)
         {
             var result = await _settingsService.SaveAsync(settingsDTO, GuidUserId);
             return NewResult(result);

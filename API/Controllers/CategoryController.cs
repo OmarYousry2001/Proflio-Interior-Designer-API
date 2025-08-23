@@ -25,20 +25,20 @@ namespace API.Controllers
 
         #region Apis
         [HttpGet(Router.CategoryRouting.GetAll)]
-        public async Task<ActionResult<RegisterDTO>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
             var result = await _categoryService.GetAllAsync();
             return NewResult(result);
 
         }
         [HttpGet(Router.CategoryRouting.GetById)]
-        public async Task<ActionResult<RegisterDTO>> GetById(Guid id )
+        public async Task<IActionResult> GetById(Guid id )
         {
             var result = await _categoryService.FindByIdAsync(id);
             return NewResult(result);
         }
         [HttpPost(Router.CategoryRouting.Create)]
-        public async Task<ActionResult<RegisterDTO>> Create(CategoryDTO settingsDTO)
+        public async Task<IActionResult> Create(CategoryDTO settingsDTO)
         {
             var result = await _categoryService.SaveAsync(settingsDTO, GuidUserId);
             return NewResult(result);
@@ -52,7 +52,7 @@ namespace API.Controllers
         }
 
         [HttpDelete(Router.CategoryRouting.Delete)]
-        public async Task<ActionResult<RegisterDTO>> Update(Guid id )
+        public async Task<IActionResult> Update(Guid id )
         {
             var result = await _categoryService.DeleteAsync(id, GuidUserId);
             return NewResult(result);

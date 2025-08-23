@@ -1519,6 +1519,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to يجب أن تكون القيمة بين {0} و {1}.
+        /// </summary>
+        public static string ValueMustBeBetween {
+            get {
+                return ResourceManager.GetString("ValueMustBeBetween", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to رقم الواتساب غير صحيح..
         /// </summary>
         public static string WhatsAppInvalid {

@@ -254,9 +254,6 @@ namespace BL.GeneralService.CMS
             return (Convert.TryFromBase64String(base64String, buffer, out _), "File is not valid");
         }
 
-        public Task<string> UploadFileAsync(IFormFile file)
-        {
-            throw new NotImplementedException();
-        }
+      
     }
 }
