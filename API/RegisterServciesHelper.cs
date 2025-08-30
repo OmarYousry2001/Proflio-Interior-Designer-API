@@ -297,6 +297,9 @@ namespace API
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<ISettingsService, SettingsService>();
             builder.Services.AddScoped<IProjectService, ProjectService>();
+            builder.Services.AddScoped<ISliderService, SliderService>();
+            builder.Services.AddScoped<ICommentService, CommentService>();
+
 
             #endregion
 

@@ -529,7 +529,7 @@
     <value>An error has occurred </value>
   </data>
   <data name="FieldLength" xml:space="preserve">
-    <value>This field must be between 2 and 100 characters</value>
+    <value>This field must be between {2} and {1} characters</value>
   </data>
   <data name="RangeDisplayOrder" xml:space="preserve">
     <value>This field must be between 1 and 10</value>
@@ -625,6 +625,6 @@
     <value>The value must be between {0} and {1}</value>
   </data>
   <data name="ValueMustBeBetween" xml:space="preserve">
-    <value>Value must be between {0} and {1}</value>
+    <value>Value must be between {1} and {2}</value>
   </data>
 </root>

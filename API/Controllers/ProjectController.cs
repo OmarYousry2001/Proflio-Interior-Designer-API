@@ -2,12 +2,14 @@
 using BL.Contracts.Services.Custom;
 using BL.DTO.Entities;
 using Domains.AppMetaData;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.DTOs.User;
 
 namespace API.Controllers
 {
     [ApiController]
+    [Authorize]
     public class ProjectController : AppControllerBase
     {
 
@@ -24,6 +26,7 @@ namespace API.Controllers
         #endregion
 
         #region Apis
+        [AllowAnonymous]
         [HttpGet(Router.ProjectRouting.GetAll)]
         public async Task<IActionResult> GetAll()
         {
@@ -31,6 +34,7 @@ namespace API.Controllers
             return NewResult(result);
 
         }
+        [AllowAnonymous]
         [HttpGet(Router.ProjectRouting.GetById)]
         public async Task<IActionResult> GetById(Guid id )
         {
@@ -38,25 +42,33 @@ namespace API.Controllers
             return NewResult(result);
         }
         [HttpPost(Router.ProjectRouting.Create)]
-        public async Task<IActionResult> Create([FromForm] ProjectDTO settingsDTO)
+        public async Task<IActionResult> Create([FromForm] ProjectDTO projectDTO)
         {
-            var result = await _projectService.SaveAsync(settingsDTO, GuidUserId);
+            var result = await _projectService.SaveAsync(projectDTO, GuidUserId);
             return NewResult(result);
         }
 
         [HttpPut(Router.ProjectRouting.Update)]
-        public async Task<IActionResult> Update([FromForm]  ProjectDTO settingsDTO)
+        public async Task<IActionResult> Update([FromForm]  ProjectDTO projectDTO)
         {
-            var result = await _projectService.SaveAsync(settingsDTO, GuidUserId);
+            var result = await _projectService.SaveAsync(projectDTO, GuidUserId);
             return NewResult(result);
         }
 
         [HttpDelete(Router.ProjectRouting.Delete)]
-        public async Task<IActionResult> Update(Guid id )
+        public async Task<IActionResult> Delete(Guid id )
         {
             var result = await _projectService.DeleteAsync(id, GuidUserId);
             return NewResult(result);
         }
+        [AllowAnonymous]
+        [HttpGet(Router.ProjectRouting.GetByCategoryId)]
+        public async Task<IActionResult> GetByCategoryId(Guid id)
+        {
+            var result = await _projectService.GetByCategoryId(id);
+            return NewResult(result);
+        }
+        
 
 
     }

@@ -18,6 +18,7 @@ namespace DAL.Contracts.Repositories.Generic
         public bool SaveRange(IEnumerable<T> entities, Guid userId);
         public bool ResetRange(IEnumerable<T> newEntities, Guid userId, Expression<Func<T, bool>> filterForOldEntities);
         public bool Remove(Guid id);
+        public Task<bool> DeleteRangeAsync(IEnumerable<Guid> ids);
         Task<bool> SaveChangeAsync();
         public   Task<T> AddAndReturnAsync(T model, Guid creatorId);
     }

@@ -511,6 +511,27 @@ namespace DAL.Repositories.Generic
 
             return model;
         }
+        /// <summary>
+        /// Permanently deletes a collection of entities from the database (Hard Delete).
+        /// </summary>
+        public async Task<bool> DeleteRangeAsync(IEnumerable<Guid> ids)
+        {
+            try
+            {
+                var entities = await DbSet.Where(e => ids.Contains(e.Id)).ToListAsync();
+                if (!entities.Any())
+                    throw new NotFoundException($"No entities of type {typeof(T).Name} found for the provided IDs.", _logger);
+
+                DbSet.RemoveRange(entities);
+                return await _dbContext.SaveChangesAsync() > 0;
+            }
+            catch (Exception ex)
+            {
+                HandleException(nameof(DeleteRangeAsync), $"Error occurred while hard-deleting multiple entities of type {typeof(T).Name}.", ex);
+                throw;
+            }
+        }
+
 
     }
 }

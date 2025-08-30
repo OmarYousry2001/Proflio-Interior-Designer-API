@@ -10,7 +10,7 @@ namespace BL.Contracts.Services.Custom
     {
         public Task<Response<IEnumerable<GetProjectDTO>>> GetAllWithIncludesAsync();
         public  Task<Response<GetProjectDTO>> FindByIdWithIncludesAsync(Guid Id);
-
+        public Task<Response<IEnumerable<GetProjectDTO>>> GetByCategoryId(Guid id);
 
     }
 }

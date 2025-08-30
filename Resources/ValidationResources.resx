@@ -625,6 +625,6 @@
     <value>يجب أن تكون القيمة من {0} إلى {1}</value>
   </data>
   <data name="ValueMustBeBetween" xml:space="preserve">
-    <value>يجب أن تكون القيمة بين {0} و {1}</value>
+    <value>يجب أن تكون القيمة بين {1} و {2}</value>
   </data>
 </root>

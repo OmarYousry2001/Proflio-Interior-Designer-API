@@ -43,6 +43,13 @@ namespace API.Controllers
             return NewResult(await _applicationUserService.ResetPassword(restPasswordDTO));
         }
 
+        [Authorize]
+        [HttpPost(Router.ApplicationUserRouting.ChangePassword)]
+        public async Task<IActionResult> ChangePassword(ChangePasswordDto changePasswordDto)
+        {
+            return NewResult(await _applicationUserService.ChangePasswordAsync(UserId ,changePasswordDto));
+        }
+
 
         [HttpGet(Router.ApplicationUserRouting.IsAuthenticated)]
         public IActionResult IsAuthenticated()

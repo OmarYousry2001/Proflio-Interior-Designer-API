@@ -17,6 +17,8 @@
             public const string Create = Prefix + "Create";
             public const string Update = Prefix + "Update";
             public const string Delete = Prefix + SingleRoute;
+            public const string GetByCategoryId = Prefix + "GetByCategoryId/" + SingleRoute;
+
             
         }
         public static class CategoryRouting
@@ -28,9 +30,30 @@
             public const string Update = Prefix + "Update";
             public const string Delete = Prefix + SingleRoute;
         }
+
+        public static class CommentRouting
+        {
+            public const string Prefix = Rule + "Comment/";
+            public const string GetAll = Prefix + "GetAll";
+            public const string GetById = Prefix + SingleRoute;
+            public const string Create = Prefix + "Create";
+            public const string Update = Prefix + "Update";
+            public const string Delete = Prefix + SingleRoute;
+        }
+        
         public static class SettingsRouting
         {
             public const string Prefix = Rule + "Settings/";
+            public const string GetAll = Prefix + "GetAll";
+            public const string GetById = Prefix + SingleRoute;
+            public const string Create = Prefix + "Create";
+            public const string Update = Prefix + "Update";
+            public const string Delete = Prefix + SingleRoute;
+        }
+
+        public static class SliderRouting
+        {
+            public const string Prefix = Rule + "Slider/";
             public const string GetAll = Prefix + "GetAll";
             public const string GetById = Prefix + SingleRoute;
             public const string Create = Prefix + "Create";

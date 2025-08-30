@@ -24,64 +24,132 @@ namespace BL.Services.Custom
             _mapper = mapper;
         }
 
-       public async Task<Response<IEnumerable<GetProjectDTO>>> GetAllWithIncludesAsync()
-               {
-                   var entitiesList = await _unitOfWork.TableRepository<Project>().GetAsync(
-                     x => x.CurrentState == 1,
-                     x => x.Category,
-                     x => x.Images
-                   );
-                   if (entitiesList == null) return NotFound<IEnumerable<GetProjectDTO>>();
-                   var dtoList = _mapper.MapList<Project, GetProjectDTO>(entitiesList);
-                   return Success(dtoList);
-               }
-       public async Task<Response<GetProjectDTO>> FindByIdWithIncludesAsync(Guid Id)
-         {
-             var entity = await _unitOfWork.TableRepository<Project>().FindAsync(
-           x => x.CurrentState == 1 && x.Id == Id,
-           x => x.Category,
-           x => x.Images
-          );
-             if (entity == null) return NotFound<GetProjectDTO>();
-             var dto = _mapper.MapModel<Project, GetProjectDTO>(entity);
-             return Success(dto);
-         }
-       public override async Task<Response<bool>> SaveAsync(ProjectDTO entityDTO, Guid userId)
+        public async Task<Response<IEnumerable<GetProjectDTO>>> GetAllWithIncludesAsync()
+        {
+            var entitiesList = await _unitOfWork.TableRepository<Project>().GetAsync(
+              x => x.CurrentState == 1,
+              x => x.Images,
+              x => x.Category
+
+            );
+
+            if (entitiesList == null) return NotFound<IEnumerable<GetProjectDTO>>();
+            var dtoList = _mapper.MapList<Project, GetProjectDTO>(entitiesList);
+            return Success(dtoList);
+        }
+
+        public async Task<Response<IEnumerable<GetProjectDTO>>> GetByCategoryId(Guid id)
+        {
+            var entitiesList = await _unitOfWork.TableRepository<Project>().GetAsync(
+              x => x.CurrentState == 1 && x.CategoryId == id,
+              x => x.Images,
+              x => x.Category
+
+            );
+
+            if (entitiesList == null) return NotFound<IEnumerable<GetProjectDTO>>();
+            var dtoList = _mapper.MapList<Project, GetProjectDTO>(entitiesList);
+            return Success(dtoList);
+        }
+
+        public async Task<Response<GetProjectDTO>> FindByIdWithIncludesAsync(Guid Id)
+        {
+            var entity = await _unitOfWork.TableRepository<Project>().FindAsync(
+          x => x.CurrentState == 1 && x.Id == Id,
+          x => x.Category,
+          x => x.Images
+         );
+            if (entity == null) return NotFound<GetProjectDTO>();
+            var dto = _mapper.MapModel<Project, GetProjectDTO>(entity);
+            return Success(dto);
+        }
+
+        public override async Task<Response<bool>> SaveAsync(ProjectDTO entityDTO, Guid userId)
+        {
+            using var transaction = await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                if (entityDTO.Photos == null && entityDTO.Images == null)
+                    return BadRequest<bool>("Please enter at least one image");
+
+                Project entity;
+                if (entityDTO.Id != Guid.Empty)
                 {
-                    using var transaction = await _unitOfWork.BeginTransactionAsync();
-                    try
+                    entity = await _unitOfWork.TableRepository<Project>().FindAsync(x => x.Id == entityDTO.Id, x => x.Images);
+                    if (entity == null) return NotFound<bool>("Project not found");
+                    _mapper.MapModel<ProjectDTO, Project>(entityDTO); // Update Fields
+
+
+                    // Handle deleted images
+                    var existingImages = entity.Images.ToList();
+                    if (entityDTO.Images != null)
                     {
-                        if (entityDTO.Photos == null && entityDTO.ImageName == null) return BadRequest<bool>("pelase Enter Image ");
+                        var imagesToDelete = existingImages
+                            .Where(img => !entityDTO.Images.Select(x => x.ImgName).Contains(img.ImgPath))
+                            .ToList();
 
-                        var entity = _mapper.MapModel<ProjectDTO, Project >(entityDTO);
-                        await _unitOfWork.TableRepository<Project>().SaveAsync(entity, userId);
-
-                        if (entityDTO.Photos?.Any() == true)
+                        if (imagesToDelete.Any())
                         {
-                            var imagePaths = await _fileUploadService.AddImagesAsync(entityDTO.Photos, "Projects", entityDTO.Title, entityDTO.ImageName);
-                            var photos = imagePaths.Select(path => new Image
-                            {
-                                ImgPath = path,
-                                ProjectId = entity.Id
-
-                            }).ToList();
-
-                            await _unitOfWork.TableRepository<Image>().AddRangeAsync(photos, userId);
-
+                            _fileUploadService.DeleteFiles(imagesToDelete.Select(img => img.ImgPath));
+                            var idsToDelete = imagesToDelete.Select(i => i.Id);
+                            await _unitOfWork.TableRepository<Image>().DeleteRangeAsync(idsToDelete);
                         }
-                        await transaction.CommitAsync();
-                        return Success(true);
                     }
-
-                    catch (Exception)
-                    {
-                        await transaction.RollbackAsync();
-                        throw;
-                    }
-
-
 
                 }
+                entity = _mapper.MapModel<ProjectDTO, Project>(entityDTO);
+                entity.Images = null;
+                await _unitOfWork.TableRepository<Project>().SaveAsync(entity, userId);
 
+
+                // Handle updating IsCover for existing images (even if no new photos)
+                if (entityDTO.Images?.Any() == true)
+                {
+                    var existingImages = await _unitOfWork.TableRepository<Image>()
+                        .GetAsync(x => x.ProjectId == entity.Id);
+
+                    foreach (var dbImage in existingImages)
+                    {
+                        var dtoImage = entityDTO.Images.FirstOrDefault(x => x.ImgName == dbImage.ImgPath);
+                        if (dtoImage != null)
+                        {
+                            dbImage.IsCover = dtoImage.IsCover;
+                            await _unitOfWork.TableRepository<Image>().UpdateAsync(dbImage, userId);
+                        }
+                    }
+                }
+
+
+                // Handle new Photos
+                if (entityDTO.Photos?.Any() == true)
+                {
+                    var imagePaths = await _fileUploadService.AddImagesAsync(entityDTO.Photos, "Projects", entityDTO.Title);
+                    var photos = imagePaths.Select((path, index) =>
+                    {
+                        var isCover = entityDTO.Images != null && entityDTO.Images.Count > index
+                            ? entityDTO.Images[index].IsCover
+                            : false;
+
+                        return new Image
+                        {
+                            ImgPath = path,
+                            ProjectId = entity.Id,
+                            IsCover = isCover
+                        };
+                    }).ToList();
+
+                    await _unitOfWork.TableRepository<Image>().AddRangeAsync(photos, userId);
+                }
+
+                await transaction.CommitAsync();
+                return Success(true);
+            }
+            catch (Exception)
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
+    
     }
 }

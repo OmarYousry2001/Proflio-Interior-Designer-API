@@ -226,15 +226,6 @@ namespace DAL.Repositories.Generic
                 //var PaginatedList =    await  QueryableExtensions.ToPaginatedListAsync(query, pageNumber, pageSize);
                 return query;
 
-
-
-                //int totalCount = await query.CountAsync();
-
-                //query = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
-
-                //var data = await query.ToListAsync();
-
-                //return new PaginatedDataModel<T>(data, totalCount);
             }
             catch (Exception ex)
             {

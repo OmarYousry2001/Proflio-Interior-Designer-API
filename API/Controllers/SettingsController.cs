@@ -2,12 +2,14 @@
 using BL.Contracts.Services.Custom;
 using BL.DTO.Entities;
 using Domains.AppMetaData;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Shared.DTOs.User;
+
 
 namespace API.Controllers
 {
     [ApiController]
+    [Authorize]
     public class SettingsController : AppControllerBase
     {
 
@@ -24,6 +26,7 @@ namespace API.Controllers
         #endregion
 
         #region Apis
+        [AllowAnonymous]
         [HttpGet(Router.SettingsRouting.GetAll)]
         public async Task<IActionResult> GetAll()
         {
@@ -31,6 +34,7 @@ namespace API.Controllers
             return NewResult(result);
 
         }
+        [AllowAnonymous]
         [HttpGet(Router.SettingsRouting.GetById)]
         public async Task<IActionResult> GetById(Guid id )
         {

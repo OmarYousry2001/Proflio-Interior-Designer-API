@@ -176,13 +176,21 @@ namespace BL.GeneralService.CMS
             else
                 return updatedUser.Errors.FirstOrDefault()?.Description ?? "An error occurred while updating the user";
         }
-        public async Task<string> ChangePasswordAsync(ApplicationUser user, string oldPassword, string confirmPassword)
+        public async Task<Response<string>> ChangePasswordAsync(string userId, ChangePasswordDto changePasswordDto)
         {
-            var isPasswordChanged = await _userManager.ChangePasswordAsync(user, oldPassword, confirmPassword);
+
+            ApplicationUser user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+                return NotFound<string>();
+
+            if (changePasswordDto.NewPassword != changePasswordDto.PasswordConfirmation) return BadRequest<string>("New password and confirm password do not match");
+           
+            var isPasswordChanged = await _userManager.ChangePasswordAsync(user, changePasswordDto.CurrentPassword, changePasswordDto.NewPassword);
             if (isPasswordChanged.Succeeded)
-                return "Succeeded";
+                return Success("Succeeded");
             else
-                return isPasswordChanged.Errors.FirstOrDefault()?.Description ?? "An error occurred while changing the password";
+                return BadRequest<string>(isPasswordChanged.Errors.FirstOrDefault()?.Description ?? "An error occurred while changing the password") ;
 
         }
 

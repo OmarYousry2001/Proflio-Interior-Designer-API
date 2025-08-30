@@ -18,7 +18,7 @@ namespace BL.Abstracts
         Task<ApplicationUser?> FindByEmailAsync(string email);
         Task<bool> CheckPasswordAsync(ApplicationUser user, string password);
         Task<string> UpdateAsync(ApplicationUser user);
-        public Task<string> ChangePasswordAsync(ApplicationUser user, string oldPassword, string confirmPassword);
+        public Task<Response<string>> ChangePasswordAsync(string userId, ChangePasswordDto changePasswordDto);
 
         public Task<Response<string>> SendResetUserPasswordCode(string email);
         Task<string> ConfirmResetPasswordCodeAsync(string Code, string Email);

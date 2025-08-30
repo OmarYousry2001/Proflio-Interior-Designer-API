@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Resources;
+using System.Diagnostics;
 
 namespace BL.GeneralService.CMS
 {
@@ -24,18 +25,14 @@ namespace BL.GeneralService.CMS
             if (string.IsNullOrWhiteSpace(relativePath) || string.IsNullOrWhiteSpace(entityName))
                 return;
 
-            // مسار الصورة الأصلي
             var sourcePath = Path.Combine(_env.WebRootPath, relativePath.Replace("/", Path.DirectorySeparatorChar.ToString()));
             if (!File.Exists(sourcePath))
                 return;
 
-            // اسم الصورة
             var fileName = Path.GetFileName(sourcePath);
 
-            // تنظيف اسم الكيان من الرموز غير الصالحة
             var safeEntityName = string.Concat(entityName.Where(c => !Path.GetInvalidFileNameChars().Contains(c))).Trim();
 
-            // مسار الأرشيف النهائي
             var archiveFolder = Path.Combine(_env.WebRootPath, _archivedImages, safeEntityName);
             Directory.CreateDirectory(archiveFolder);
 
@@ -140,6 +137,8 @@ namespace BL.GeneralService.CMS
             return relativePath;
         }
 
+
+    
         public async Task<string> UploadVideoAsync( IFormFile file, string featureFolder, string oldFileName = null)
         {
             if (file == null || file.Length == 0)
@@ -249,7 +248,7 @@ namespace BL.GeneralService.CMS
 
             var imageProcessor = new ImageProcessingService();
 
-            if (oldFileNames != null)
+            if (oldFileNames != null )
             {
                 foreach (var oldFile in oldFileNames)
                 {
@@ -260,24 +259,39 @@ namespace BL.GeneralService.CMS
                 }
             }
 
-            foreach (var file in files)
-            {
-                if (file.Length > 0)
-                {
-                    var fileBytes = await GetFileBytesAsync(file);
-                    var processedImage = imageProcessor.ConvertToWebP(fileBytes, quality: 100);
-                    var uniqueFileName = $"{Guid.NewGuid()}.webp";
-                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+            //foreach (var file in files)
+            //{
+            //    if (file.Length > 0)
+            //    {
+            //        var fileBytes = await GetFileBytesAsync(file);
+            //        var processedImage = imageProcessor.ConvertToWebP(fileBytes, quality: 100);
+            //        var uniqueFileName = $"{Guid.NewGuid()}.webp";
+            //        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
-                    await File.WriteAllBytesAsync(filePath, processedImage);
+            //        await File.WriteAllBytesAsync(filePath, processedImage);
 
-                    var relativePath = Path.Combine(_imagesFolder, featureFolder, nameEntity, uniqueFileName)
-                                        .Replace("\\", "/");
-                    savedImagePaths.Add(relativePath);
-                }
-            }
+            //        var relativePath = Path.Combine(_imagesFolder, featureFolder, nameEntity, uniqueFileName)
+            //                            .Replace("\\", "/");
+            //        savedImagePaths.Add(relativePath);
+            //    }
+            //}
 
-            return savedImagePaths;
+
+            var tasks = files.Select(async file => {
+                var fileBytes = await GetFileBytesAsync(file);
+                var processedImage = imageProcessor.ConvertToWebP(fileBytes, quality: 80);
+                var uniqueFileName = $"{Guid.NewGuid()}.webp";
+                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                await File.WriteAllBytesAsync(filePath, processedImage);
+                return Path.Combine(_imagesFolder, featureFolder, nameEntity, uniqueFileName).Replace("\\", "/");
+            });
+
+            var savedImagePathsEnd = await Task.WhenAll(tasks);
+
+
+
+
+            return savedImagePathsEnd.ToList();
         }
 
 
@@ -311,6 +325,31 @@ namespace BL.GeneralService.CMS
             return (Convert.TryFromBase64String(base64String, buffer, out _), "File is not valid");
         }
 
-      
-    }
+     
+
+        
+            public void DeleteFile(string relativePath)
+            {
+                if (string.IsNullOrWhiteSpace(relativePath)) return;
+
+                var fullPath = Path.Combine(_env.WebRootPath, relativePath.Replace("/", Path.DirectorySeparatorChar.ToString()));
+                if (File.Exists(fullPath))
+                {
+                    File.Delete(fullPath);
+                }
+            }
+
+            public void DeleteFiles(IEnumerable<string> relativePaths)
+            {
+                if (relativePaths == null) return;
+
+                foreach (var path in relativePaths)
+                {
+                    DeleteFile(path);
+                }
+            }
+        }
+
+
+
 }

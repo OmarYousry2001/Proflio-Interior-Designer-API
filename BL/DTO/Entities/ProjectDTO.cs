@@ -21,7 +21,7 @@ namespace BL.DTO.Entities
         [StringLength(100, MinimumLength = 2, ErrorMessageResourceName = "FieldLength", ErrorMessageResourceType = typeof(ValidationResources))]
         public string ClientName { get; set; } = null!;
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(ValidationResources))]
-        [ValidYearAttribute(MinYear = 2010, ErrorMessageResourceName = "ValueMustBeBetween", ErrorMessageResourceType = typeof(ValidationResources))]
+        //[ValidYearAttribute(MinYear = 2010, ErrorMessageResourceName = "ValueMustBeBetween", ErrorMessageResourceType = typeof(ValidationResources))]
         public int Year { get; set; }
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(ValidationResources))]
         [StringLength(100, MinimumLength = 2, ErrorMessageResourceName = "FieldLength", ErrorMessageResourceType = typeof(ValidationResources))]
@@ -31,8 +31,9 @@ namespace BL.DTO.Entities
         [MaxFileSize(5)]
         public IFormFileCollection? Photos { get; set; } = null!;
 
-        public List<string>? ImageName { get; set; }
-
+        //public List<string>? ImageName { get; set; }
+        public List<ImageDTO>? Images { get; set; }
+        
         // Relations
         [Required(ErrorMessageResourceName = "FieldRequired", ErrorMessageResourceType = typeof(ValidationResources))]
         public Guid CategoryId { get; set; }

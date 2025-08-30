@@ -42,7 +42,6 @@ namespace BL.Services.Custom
                 entity.Video = await _fileUploadService.UploadVideoAsync(dto.Video, "Settings", dto.VideoName);
             }
 
-
             var isSaved = await _settingsRepository.SaveAsync(entity, userId);
             if (isSaved) return Success(true);
             else return BadRequest<bool>();

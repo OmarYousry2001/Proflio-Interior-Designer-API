@@ -8,23 +8,6 @@ namespace BL.Mapper
     {
         public MappingProfile()
         {
-
-            //CreateMap<TbRefreshToken, RefreshTokenDto>().ReverseMap();
-            //CreateMap<ApplicationUser, UserRegistrationDto>().ReverseMap();
-            //CreateMap<VwUserProfile, UserProfileViewDto>().ReverseMap();
-
-            #region Product
-            //CreateMap<Product, GetProductDTO>()
-            //.ForMember(des => des.CategoryName, opt => opt.MapFrom(src => src.Category.Name))
-            //.ForMember(des => des.Id, opt => opt.MapFrom(src => src.Id)).ReverseMap();
-
-            //CreateMap<Photo, PhotoDTO>()
-            //.ForMember(des => des.ImageName, opt => opt.MapFrom(src => src.ImagePath)).ReverseMap();
-
-            //CreateMap<ProductDTO, Product>().ReverseMap();
-            #endregion
-
-
             #region Settings 
             CreateMap<Settings, SettingsDTO>()
                 .ForMember(dest => dest.LogoName, opt => opt.MapFrom(src => src.Logo))
@@ -40,6 +23,13 @@ namespace BL.Mapper
             CreateMap<Category, CategoryDTO>().ReverseMap();
             #endregion
 
+            #region Slider 
+            CreateMap<Slider, SliderDTO>().ReverseMap();
+            #endregion
+
+            #region Comment 
+            CreateMap<Comment, CommentDTO>().ReverseMap();
+            #endregion
 
             #region Project 
 
@@ -52,17 +42,10 @@ namespace BL.Mapper
 
             #endregion
 
-
             #region Image 
             CreateMap<Image, ImageDTO>()
            .ForMember(des => des.ImgName, opt => opt.MapFrom(src => src.ImgPath)).ReverseMap();    
             #endregion
-
-
-
-
-
-
 
         }
     }

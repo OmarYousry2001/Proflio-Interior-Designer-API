@@ -2,12 +2,14 @@
 using BL.Contracts.Services.Custom;
 using BL.DTO.Entities;
 using Domains.AppMetaData;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.DTOs.User;
 
 namespace API.Controllers
 {
     [ApiController]
+    [Authorize]
     public class CategoryController : AppControllerBase
     {
 
@@ -24,6 +26,7 @@ namespace API.Controllers
         #endregion
 
         #region Apis
+        [AllowAnonymous]
         [HttpGet(Router.CategoryRouting.GetAll)]
         public async Task<IActionResult> GetAll()
         {
@@ -31,6 +34,7 @@ namespace API.Controllers
             return NewResult(result);
 
         }
+        [AllowAnonymous]
         [HttpGet(Router.CategoryRouting.GetById)]
         public async Task<IActionResult> GetById(Guid id )
         {
@@ -38,21 +42,21 @@ namespace API.Controllers
             return NewResult(result);
         }
         [HttpPost(Router.CategoryRouting.Create)]
-        public async Task<IActionResult> Create(CategoryDTO settingsDTO)
+        public async Task<IActionResult> Create(CategoryDTO categoryDTO)
         {
-            var result = await _categoryService.SaveAsync(settingsDTO, GuidUserId);
+            var result = await _categoryService.SaveAsync(categoryDTO, GuidUserId);
             return NewResult(result);
         }
 
         [HttpPut(Router.CategoryRouting.Update)]
-        public async Task<ActionResult<RegisterDTO>> Update(CategoryDTO settingsDTO)
+        public async Task<ActionResult<RegisterDTO>> Update(CategoryDTO categoryDTO)
         {
-            var result = await _categoryService.SaveAsync(settingsDTO, GuidUserId);
+            var result = await _categoryService.SaveAsync(categoryDTO, GuidUserId);
             return NewResult(result);
         }
 
         [HttpDelete(Router.CategoryRouting.Delete)]
-        public async Task<IActionResult> Update(Guid id )
+        public async Task<IActionResult> Delete(Guid id )
         {
             var result = await _categoryService.DeleteAsync(id, GuidUserId);
             return NewResult(result);

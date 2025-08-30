@@ -1519,7 +1519,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to يجب أن تكون القيمة بين {0} و {1}.
+        ///   Looks up a localized string similar to يجب أن تكون القيمة بين {1} و {2}.
         /// </summary>
         public static string ValueMustBeBetween {
             get {
