@@ -22,6 +22,9 @@ namespace API.Controllers
         #endregion
 
         #region Apis
+        /// <summary>
+        /// Authenticate a user and generate an access token.
+        /// </summary>
         [HttpPost(Router.AuthenticationRouting.Login)]
         public async Task<IActionResult> Login(LoginDTO loginDTO)
         {
@@ -35,6 +38,9 @@ namespace API.Controllers
             return NewResult(result);
         }
 
+        /// <summary>
+        /// Logout the authenticated user and remove the access token.
+        /// </summary>
         [Authorize]
         [HttpGet(Router.AuthenticationRouting.Logout)]
         public async Task<IActionResult> Logout()

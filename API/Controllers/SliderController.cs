@@ -12,7 +12,6 @@ namespace API.Controllers
     [Authorize]
     public class SliderController : AppControllerBase
     {
-
         #region Fields
         private readonly ISliderService _sliderService;
         #endregion
@@ -26,6 +25,9 @@ namespace API.Controllers
         #endregion
 
         #region Apis
+        /// <summary>
+        /// Get all sliders.
+        /// </summary>
         [AllowAnonymous]
         [HttpGet(Router.SliderRouting.GetAll)]
         public async Task<IActionResult> GetAll()
@@ -35,12 +37,19 @@ namespace API.Controllers
 
         }
 
+        /// <summary>
+        /// Get a slider by ID.
+        /// </summary>
         [HttpGet(Router.SliderRouting.GetById)]
         public async Task<IActionResult> GetById(Guid id )
         {
             var result = await _sliderService.FindByIdAsync(id);
             return NewResult(result);
         }
+
+        /// <summary>
+        /// Create a new slider.
+        /// </summary>
         [HttpPost(Router.SliderRouting.Create)]
         public async Task<IActionResult> Create([FromForm] SliderDTO sliderDTO)
         {
@@ -48,6 +57,9 @@ namespace API.Controllers
             return NewResult(result);
         }
 
+        /// <summary>
+        /// Update an existing slider.
+        /// </summary>
         [HttpPut(Router.SliderRouting.Update)]
         public async Task<ActionResult<RegisterDTO>> Update([FromForm]  SliderDTO sliderDTO)
         {
@@ -55,6 +67,9 @@ namespace API.Controllers
             return NewResult(result);
         }
 
+        /// <summary>
+        /// Delete a slider by ID.
+        /// </summary>
         [HttpDelete(Router.SliderRouting.Delete)]
         public async Task<IActionResult> Delete(Guid id )
         {

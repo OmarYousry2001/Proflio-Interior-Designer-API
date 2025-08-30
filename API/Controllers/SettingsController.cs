@@ -26,6 +26,9 @@ namespace API.Controllers
         #endregion
 
         #region Apis
+        /// <summary>
+        /// Get all settings.
+        /// </summary>
         [AllowAnonymous]
         [HttpGet(Router.SettingsRouting.GetAll)]
         public async Task<IActionResult> GetAll()
@@ -34,6 +37,10 @@ namespace API.Controllers
             return NewResult(result);
 
         }
+
+        /// <summary>
+        /// Get a setting by ID.
+        /// </summary>
         [AllowAnonymous]
         [HttpGet(Router.SettingsRouting.GetById)]
         public async Task<IActionResult> GetById(Guid id )
@@ -42,6 +49,9 @@ namespace API.Controllers
             return NewResult(result);
         }
 
+        /// <summary>
+        /// Update application settings.
+        /// </summary>
         [RequestSizeLimit(60_000_000)] // 60 MB
         [HttpPut(Router.SettingsRouting.Update)]
         public async Task<IActionResult> Update([FromForm] SettingsDTO settingsDTO)
@@ -49,8 +59,6 @@ namespace API.Controllers
             var result = await _settingsService.SaveAsync(settingsDTO, GuidUserId);
             return NewResult(result);
         }
-
-
 
     }
     #endregion
